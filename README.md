@@ -6,6 +6,7 @@
         
 Install Python virtual environment to the project folder and activate it.
 
+        cd wagtail-blog
         python3 -m venv .venv
         mkdir sqlite
         source .venv/bin/activate
