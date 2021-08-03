@@ -11,6 +11,16 @@ Install Python virtual environment to the project folder and activate it.
         source .venv/bin/activate
         python manage.py migrate
 
+Localize language and timezone on the file settings/base.py.
+
+        # Internationalization
+        # https://docs.djangoproject.com/en/3.2/topics/i18n/
+
+        LANGUAGE_CODE = 'fi-fi'
+
+        TIME_ZONE = 'Europe/Helsinki'
+
+
 ## Running locally dev environment
 
 On the Python virtual environment:
@@ -27,6 +37,12 @@ On the Python virtual environment:
 
 ![Welcome page after the installation](images/server.PNG)
 
-## Creating admin user for management
+## Creating admin user for management purposes.
 
     python manage.py createsuperuser
+
+Test created user on Python environment and docker dev container, the same user should work on both instances. The dev database is on subfolder sqlite.
+
+[http://localhost:8000/admin]
+
+![Admin site](images/admin.PNG)
