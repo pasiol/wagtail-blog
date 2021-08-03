@@ -7,6 +7,7 @@
 Install Python virtual environment to the project folder and activate it.
 
         python3 -m venv .venv
+        mkdir sqlite
         source .venv/bin/activate
         python manage.py migrate
 
@@ -25,3 +26,7 @@ On the Python virtual environment:
          docker run --rm -p 8000:8000 -v $PWD/sqlite:/app/sqlite -e SITE_NAME="Blog-app demo" wagtail_blog
 
 ![Welcome page after the installation](images/server.PNG)
+
+## Creating admin user for management
+
+    python manage.py createsuperuser
