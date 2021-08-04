@@ -10,6 +10,7 @@ Install Python virtual environment to the project folder and activate it.
         python3 -m venv .venv
         mkdir sqlite
         source .venv/bin/activate
+        pip install -r requirements.txt
         python manage.py migrate
 
 Localize language and timezone on the file settings/base.py.
