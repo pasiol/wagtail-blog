@@ -1,0 +1,6 @@
+venv
+sqlite
+
+*.log
+
+__pycache__
