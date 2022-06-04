@@ -1,0 +1,53 @@
+- name: "Create app database"
+  postgresql_db:
+    state: present
+    name: "{{ app_db }}"
+    encoding: UTF-8
+    lc_collate: fi_FI.UTF-8
+    lc_ctype: fi_FI.UTF-8
+  become: true
+  become_user: postgres
+
+- name: "Create db user"
+  postgresql_user:
+    state: present
+    name: "{{ app_db }}"
+    password: "{{ app_password }}"
+  become: true
+  become_user: postgres
+
+- name: "Grant db user access to app db"
+  postgresql_privs:
+    type: database
+    database: "{{ app_db }}"
+    roles: "{{ app_db }}"
+    grant_option: no
+    privs: all
+  become: true
+  become_user: postgres
+
+- name: "Allow peer connection for the db user"
+  postgresql_pg_hba:
+    dest:  "{{ pg_conf_dir }}/pg_hba.conf"
+    contype: local
+    databases: "{{ app_db }}"
+    method: md5
+    users: "{{ app_db }}"
+    create: true
+  become: true
+  become_user: postgres
+
+- name: "Allow md5 connection for the db user"
+  postgresql_pg_hba:
+    dest:  "{{ pg_conf_dir }}/pg_hba.conf"
+    contype: hostssl
+    source: "{{ host_ipv4_cidr }}"
+    databases: "{{ app_db }}"
+    method: md5
+    users: "{{ app_db }}"
+    create: true
+  become: true
+  become_user: postgres
+
+- name: restart postgresql-server
+  service: name=postgresql state=restarted

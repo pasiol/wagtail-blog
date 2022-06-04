@@ -1,0 +1,23 @@
+---
+- name: Set a hostname
+  ansible.builtin.hostname:
+    name: "{{ hostname }}"
+    use: systemd
+- name: Set timezone
+  community.general.timezone:
+    name: "{{ timezone }}"
+- name: Install some packages
+  ansible.builtin.package:
+    name:
+      - vim
+      - firewalld
+      - acl
+    state: latest
+- name: permit traffic in default zone services
+  ansible.posix.firewalld:
+    service: "{{ item }}"
+    permanent: yes
+    immediate: yes
+    state: enabled
+  with_items:
+    - "{{ services }}"  
