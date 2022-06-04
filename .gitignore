@@ -4,3 +4,10 @@ sqlite
 *.log
 
 __pycache__
+
+memos.md
+
+*.exe
+*_key*
+
+.env
