@@ -11,3 +11,8 @@ memos.md
 *_key*
 
 .env
+
+# Ansible variable-files
+dev.yaml
+test.yaml
+prod.yaml

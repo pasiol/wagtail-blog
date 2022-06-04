@@ -1,0 +1,23 @@
+---
+- name: setup dev-environment
+  hosts: dev_db
+  remote_user: ansible
+  become: yes
+  become_method: sudo
+  #gather_facts: no
+  vars:
+    hostname: db.localdomain
+    timezone: "Europe/Helsinki"
+    services: 
+      - ssh
+      - postgresql
+    pg_conf_dir: "/etc/postgresql/13/main/"
+    host_ipv4_cidr: "NNN.NNN.NNN.NNN/NN"
+    host_ipv4: "NNN.NNN.NNN.NNN"
+    app_db: "wagtail"
+    app_password: "topsecret" 
+  roles:
+    - ping
+    - server
+    - postgresql
+    - postgresql_create_app_db
