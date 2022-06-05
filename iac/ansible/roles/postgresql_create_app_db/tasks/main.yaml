@@ -1,7 +1,7 @@
 - name: "Create app database"
   postgresql_db:
     state: present
-    name: "{{ app_db }}"
+    name: "{{ app_name }}"
     encoding: UTF-8
     lc_collate: fi_FI.UTF-8
     lc_ctype: fi_FI.UTF-8
@@ -11,7 +11,7 @@
 - name: "Create db user"
   postgresql_user:
     state: present
-    name: "{{ app_db }}"
+    name: "{{ app_name }}"
     password: "{{ app_password }}"
   become: true
   become_user: postgres
@@ -19,8 +19,8 @@
 - name: "Grant db user access to app db"
   postgresql_privs:
     type: database
-    database: "{{ app_db }}"
-    roles: "{{ app_db }}"
+    database: "{{ app_name }}"
+    roles: "{{ app_name }}"
     grant_option: no
     privs: all
   become: true
@@ -30,9 +30,9 @@
   postgresql_pg_hba:
     dest:  "{{ pg_conf_dir }}/pg_hba.conf"
     contype: local
-    databases: "{{ app_db }}"
+    databases: "{{ app_name }}"
     method: md5
-    users: "{{ app_db }}"
+    users: "{{ app_name }}"
     create: true
   become: true
   become_user: postgres
@@ -42,9 +42,9 @@
     dest:  "{{ pg_conf_dir }}/pg_hba.conf"
     contype: hostssl
     source: "{{ host_ipv4_cidr }}"
-    databases: "{{ app_db }}"
+    databases: "{{ app_name }}"
     method: md5
-    users: "{{ app_db }}"
+    users: "{{ app_name }}"
     create: true
   become: true
   become_user: postgres
