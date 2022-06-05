@@ -2,3 +2,4 @@ Django>=3.2,<=4.0
 wagtail>=3.0
 ansible
 python-dotenv
+psycopg2-binary
