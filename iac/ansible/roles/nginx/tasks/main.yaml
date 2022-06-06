@@ -1,0 +1,34 @@
+---
+- name: Install nginx server
+  ansible.builtin.package:
+    name: nginx
+    state: present
+
+- name: Enable nginx service
+  systemd:
+    name: nginx
+    enabled: true
+    masked: no
+
+- name: Make sure a service unit is running
+  ansible.builtin.systemd:
+    state: started
+    name: nginx
+
+- name: copy the nginx config file and restart nginx
+  ansible.builtin.template:
+    src: default.conf.j2
+    dest: "/etc/nginx/sites-available/{{ app_name }}.cfg"
+
+- name: create symlink
+  file:
+    src: "/etc/nginx/sites-available/{{ app_name }}.cfg"
+    dest: /etc/nginx/sites-enabled/default
+    state: link
+  become: true
+
+- name: restart nginx
+  service:
+    name: nginx
+    state: restarted
+  become: true

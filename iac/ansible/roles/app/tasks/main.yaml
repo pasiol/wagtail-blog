@@ -1,0 +1,39 @@
+- name: Install Django deployment related packages
+  ansible.builtin.package:
+    name:
+      - git
+      - python
+      - python3-venv
+      - python3-pip
+    state: latest
+- name: Add app user
+  ansible.builtin.user:
+    name: "{{ app_name }}"
+
+- name: Git clone
+  ansible.builtin.git:
+    repo: "{{ app_repo }}"
+    dest: "/home/{{ app_name }}/app"
+    clone: yes
+    single_branch: yes
+    version: dev
+
+- name: Manually create the initial virtualenv
+  command:
+    cmd: "python3 -m venv venv"
+    chdir: "/home/{{ app_name }}/app/"
+    creates: "/home/{{ app_name }}/app/venv"
+
+- name: Recursively change ownership of a directory
+  ansible.builtin.file:
+    path: "/home/{{ app_name }}/app"
+    state: directory
+    recurse: yes
+    owner: "{{ app_name }}"
+    group: "www-data"
+
+- name: Install requirements
+  pip: 
+    requirements: requirements.txt 
+    virtualenv: "/home/{{ app_name }}/app/venv"
+    chdir: "/home/{{ app_name }}/app"

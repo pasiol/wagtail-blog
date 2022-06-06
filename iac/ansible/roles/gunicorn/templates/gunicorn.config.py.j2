@@ -1,0 +1,21 @@
+# Django WSGI application path in pattern MODULE_NAME:VARIABLE_NAME
+wsgi_app = "blog_app.wsgi:application"
+
+loglevel = "debug"
+
+bind = "{{ host_ipv4 }}:8000"
+workers = 3
+
+reload = False
+
+User="{{ app_name }}"
+Group="www-data"
+
+accesslog = "/var/log/gunicorn/access.{{ app_name }}.log"
+errorlog = "/var/log/gunicorn/error.{{ app_name }}.log" 
+capture_output = True 
+loglevel = "info"
+
+pidfile = "/var/run/gunicorn/{{ app_name }}.pid"
+
+daemon = True

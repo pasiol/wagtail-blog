@@ -1,0 +1,40 @@
+- name: Gunicorn config template file
+  ansible.builtin.template:
+    src: "gunicorn.config.py.j2"
+    dest: "/home/{{ app_name }}/gunicorn.config.py"
+    owner: "{{ app_name }}"
+    group: www-data
+    mode: "0644"
+
+- name: Change file ownership, group and permissions
+  ansible.builtin.file:
+    path: "/var/{{ item }}"
+    state: directory
+    owner: "{{ app_name }}"
+    group: www-data
+    mode: '0644'
+  with_items:
+    - log/gunicorn
+    - run/gunicorn
+  
+- name: Gunicorn config template file
+  ansible.builtin.template:
+    src: ".env.j2"
+    dest: "/home/{{ app_name }}/app/.env"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+
+- name: Start gunicorn 
+  shell: "source /home/{{ app_name }}/app/venv/bin/activate && gunicorn -c /home/{{ app_name }}/gunicorn.config.py"
+  args:
+    executable: /bin/bash
+  become: true
+  become_user: "{{ app_name }}"
+
+- name: Run migrations
+  shell: "source /home/{{ app_name }}/app/venv/bin/activate && python /home/{{ app_name }}/app/manage.py migrate"
+  args:
+    executable: /bin/bash
+  become: true
+
