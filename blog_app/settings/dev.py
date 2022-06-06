@@ -27,6 +27,7 @@ DATABASES = {
         "PORT": os.getenv("POSTGRES_PORT", 5432),
         'OPTIONS': {
             'connect_timeout': 3,
+            'sslmode': 'require'
         }
     }
 }
