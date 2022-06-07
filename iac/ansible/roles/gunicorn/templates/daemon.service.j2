@@ -1,0 +1,16 @@
+[Unit]
+Description=Gunicorn Server for a {{ app_name }} Application
+After=syslog.target network.target
+
+[Service]
+WorkingDirectory=/home/{{ app_name }}/app
+ExecStart=/home/{{ app_name }}/app/venv/bin/gunicorn -c /home/{{ app_name }}/gunicorn.config.py
+PrivateTmp=true
+User={{ app_name }}
+Group=www-data
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s QUIT $MAINPID
+PIDFile=/run/nginx.pid
+
+[Install]
+WantedBy=multi-user.target

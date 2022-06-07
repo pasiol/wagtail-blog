@@ -10,11 +10,6 @@
     enabled: true
     masked: no
 
-- name: Make sure a service unit is running
-  ansible.builtin.systemd:
-    state: started
-    name: nginx
-
 - name: copy the nginx config file and restart nginx
   ansible.builtin.template:
     src: default.conf.j2
@@ -32,3 +27,8 @@
     name: nginx
     state: restarted
   become: true
+
+- name: Make sure a service unit is running
+  ansible.builtin.systemd:
+    state: started
+    name: nginx

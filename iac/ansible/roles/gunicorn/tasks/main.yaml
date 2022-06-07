@@ -17,7 +17,7 @@
     - log/gunicorn
     - run/gunicorn
   
-- name: Gunicorn config template file
+- name: .env file
   ansible.builtin.template:
     src: ".env.j2"
     dest: "/home/{{ app_name }}/app/.env"
@@ -25,12 +25,13 @@
     group: "root"
     mode: "0644"
 
-- name: Start gunicorn 
-  shell: "source /home/{{ app_name }}/app/venv/bin/activate && gunicorn -c /home/{{ app_name }}/gunicorn.config.py"
-  args:
-    executable: /bin/bash
-  become: true
-  become_user: "{{ app_name }}"
+- name: "{{ app_name }} systemd service file"
+  ansible.builtin.template:
+    src: "daemon.service.j2"
+    dest: "/etc/systemd/system/{{ app_name }}.service"
+    owner: "root"
+    group: "root"
+    mode: "0664"
 
 - name: Run migrations
   shell: "source /home/{{ app_name }}/app/venv/bin/activate && python /home/{{ app_name }}/app/manage.py migrate"
@@ -38,3 +39,7 @@
     executable: /bin/bash
   become: true
 
+- name:  "Start {{ app_name }}.service"
+  ansible.builtin.systemd:
+    name: "{{ app_name }}"
+    state: started

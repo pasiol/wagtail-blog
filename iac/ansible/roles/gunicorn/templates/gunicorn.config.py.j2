@@ -8,14 +8,7 @@ workers = 3
 
 reload = False
 
-User="{{ app_name }}"
-Group="www-data"
-
-accesslog = "/var/log/gunicorn/access.{{ app_name }}.log"
-errorlog = "/var/log/gunicorn/error.{{ app_name }}.log" 
+accesslog = "/home/{{ app_name }}/access.log"
+errorlog = "/home/{{ app_name }}/error.log" 
 capture_output = True 
 loglevel = "info"
-
-pidfile = "/var/run/gunicorn/{{ app_name }}.pid"
-
-daemon = True
