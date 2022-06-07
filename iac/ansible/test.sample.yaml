@@ -1,0 +1,29 @@
+---
+- name: setup test-environment
+  hosts: test_server
+  remote_user: ansible
+  become: yes
+  become_method: sudo
+  #gather_facts: no
+  vars:
+    hostname: test.localdomain
+    timezone: "Europe/Helsinki"
+    services: 
+      - ssh
+      - postgresql
+      - http
+      - https
+    pg_conf_dir: "/etc/postgresql/13/main/"
+    host_ipv4_cidr: "NNN.NNN.NNN.NNN/NN"
+    host_ipv4: "NNN.NNN.NNN.NNN"
+    app_name: "wagtail-test"
+    app_password: "topsecret-test"
+    app_repo: "https://github.com/pasiol/wagtail-blog.git"
+  roles:
+    - ping
+    - server
+    - postgresql
+    - postgresql_create_app_db
+    - app
+    - gunicorn
+    - nginx
