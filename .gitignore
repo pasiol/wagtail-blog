@@ -16,3 +16,8 @@ memos.md
 dev.yaml
 test.yaml
 prod.yaml
+inventory
+
+# IaC
+iac/tf
+iac/packer
